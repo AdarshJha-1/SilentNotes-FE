@@ -3,6 +3,7 @@ import { Preview } from "./components/Preview"
 import { SignUp } from "./components/SignUp"
 import { Login } from "./components/Login"
 import { Header } from "./components/Header"
+import { Dashboard } from "./components/Dashboard"
 
 export const App = () => {
   return (
@@ -12,6 +13,7 @@ export const App = () => {
         <Route path="/" element={<Preview />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </main>
   )
