@@ -4,12 +4,14 @@ import { App } from './App.tsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from './components/ui/toaster.tsx'
-
+import {RecoilRoot} from "recoil"
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+    <RecoilRoot>
       <App />
-      <Toaster />
-    </BrowserRouter>
+      <Toaster /> 
+    </RecoilRoot>
+   </BrowserRouter>
   </StrictMode>,
 )
