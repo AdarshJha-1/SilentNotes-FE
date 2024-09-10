@@ -10,3 +10,8 @@ export const userState = atom({
   },
 effects_UNSTABLE: [persistAtom],
 })
+
+export const isAcceptingMessagesState = atom({
+  key: "isAcceptingMessagesState",
+  default: true
+})

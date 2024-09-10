@@ -14,8 +14,8 @@ import { Input } from "../components/ui/input"
 import { Link, useNavigate, } from "react-router-dom"
 import { ResponseType } from "../types/response"
 import { useToast } from "./ui/use-toast"
-import {useSetRecoilState} from "recoil"
-import {userState} from "../store/atom.ts"
+import { useSetRecoilState } from "recoil"
+import { isAcceptingMessagesState, userState } from "../store/atom.ts"
 
 
 
@@ -28,7 +28,8 @@ export const Login = () => {
 
   const { toast } = useToast()
   const navigate = useNavigate()
-  const setUserSatate = useSetRecoilState(userState);
+  const setUserState = useSetRecoilState(userState);
+  const setAcceptMessageStatus = useSetRecoilState(isAcceptingMessagesState);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,15 +53,17 @@ export const Login = () => {
           description: response.error,
         })
       } else {
-        localStorage.setItem("token", response.data.token);
-        setUserSatate({user: response.data.user, isLogin: true})
+        if (response.data) {
+          setUserState({ user: response.data.user, isLogin: true })
+          setAcceptMessageStatus(true)
+        }
         toast({
           title: response.message,
         })
         navigate("/dashboard")
       }
     } catch (error) {
-      setUserSatate({user: null, isLogin: false})
+      setUserState({ user: null, isLogin: false })
       if (error instanceof AxiosError) {
         toast({
           title: 'Error',
@@ -82,45 +85,45 @@ export const Login = () => {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-          Welcome Back to AMA</h1>
+            Welcome Back to AMA</h1>
           <p className="mb-4">Sign in to continue your secret conversations</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-            name="identifier"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email/Username</FormLabel>
+              name="identifier"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email/Username</FormLabel>
                   <Input {...field} />
                   <FormMessage />
                 </FormItem>
-            )}
-          />
+              )}
+            />
             <FormField
-            name="password"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
+              name="password"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
                   <Input type="password" {...field} />
                   <FormMessage />
                 </FormItem>
-            )}
-          />
+              )}
+            />
             <Button className='w-full' type="submit">Sign In</Button>
           </form>
         </Form>
         <div className="text-center mt-4">
           <p>
-          Not a member yet?{' '}
+            Not a member yet?{' '}
             <Link to="/sign-up" className="text-blue-600 hover:text-blue-800">
-            Sign up
-          </Link>
+              Sign up
+            </Link>
           </p>
         </div>
       </div>
-      </div>
+    </div>
   )
 }
